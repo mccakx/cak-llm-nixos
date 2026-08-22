@@ -29,7 +29,7 @@ in
     services.greetd = {
       enable = true;
       settings.default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
         user = "greeter";
       };
     };
@@ -52,7 +52,7 @@ in
 
     # A couple of system-level GUI bits everyone expects.
     environment.systemPackages = with pkgs; [
-      greetd.tuigreet
+      tuigreet
     ];
   };
 }
