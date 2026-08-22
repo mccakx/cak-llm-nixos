@@ -11,48 +11,62 @@ in
   options.cak.desktop.environment = lib.mkOption {
     type = lib.types.enum [
       "none"
+      "xfce"
       "hyprland"
     ];
     default = "none";
     description = ''
       Which graphical session to enable. "none" is a headless machine.
-      Add more compositors/DEs as extra enum values + mkIf branches.
+      Add more DEs/compositors as extra enum values + mkIf branches.
     '';
   };
 
-  config = lib.mkIf (cfg.environment == "hyprland") {
-    # Compositor (system side). The user session is configured in
-    # Home Manager (modules/home/hyprland.nix).
-    programs.hyprland.enable = true;
+  config = lib.mkMerge [
+    # ---- Shared desktop plumbing (any graphical environment) -------------
+    (lib.mkIf (cfg.environment != "none") {
+      security.polkit.enable = true;
+      services.dbus.enable = true;
+      programs.dconf.enable = true;
+      services.gvfs.enable = true; # trash / mounts for file managers
 
-    # Minimal, light greeter that logs straight into Hyprland.
-    services.greetd = {
-      enable = true;
-      settings.default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
-        user = "greeter";
+      xdg.portal = {
+        enable = true;
+        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };
-    };
+    })
 
-    # Desktop plumbing.
-    security.polkit.enable = true;
-    services.dbus.enable = true;
-    programs.dconf.enable = true;
-    services.gvfs.enable = true; # trash / mounts for the file manager
+    # ---- XFCE (X11, lightweight, traditional desktop) -------------------
+    (lib.mkIf (cfg.environment == "xfce") {
+      services.xserver = {
+        enable = true;
+        xkb.layout = "us";
+        desktopManager.xfce.enable = true;
+        displayManager.lightdm.enable = true;
+      };
+      services.displayManager.defaultSession = "xfce";
 
-    xdg.portal = {
-      enable = true;
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    };
+      # A couple of quality-of-life extras XFCE users expect.
+      environment.systemPackages = with pkgs; [
+        xfce.xfce4-whiskermenu-plugin # nicer start menu
+        xfce.xfce4-pulseaudio-plugin # volume control in the panel
+        xfce.xfce4-screenshooter
+      ];
+    })
 
-    # Wayland-friendly defaults.
-    environment.sessionVariables = {
-      NIXOS_OZONE_WL = "1"; # Electron/Chromium/Firefox run natively on Wayland
-    };
+    # ---- Hyprland (Wayland tiling compositor) ---------------------------
+    (lib.mkIf (cfg.environment == "hyprland") {
+      programs.hyprland.enable = true;
 
-    # A couple of system-level GUI bits everyone expects.
-    environment.systemPackages = with pkgs; [
-      tuigreet
-    ];
-  };
+      services.greetd = {
+        enable = true;
+        settings.default_session = {
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
+          user = "greeter";
+        };
+      };
+
+      environment.sessionVariables.NIXOS_OZONE_WL = "1";
+      environment.systemPackages = [ pkgs.tuigreet ];
+    })
+  ];
 }

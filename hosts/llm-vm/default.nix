@@ -4,7 +4,7 @@
 
   # This is the whole machine definition: pick features, done.
   cak = {
-    desktop.environment = "hyprland";
+    desktop.environment = "xfce";
     audio.enable = true;
     guest.hypervisor = "qemu";
 

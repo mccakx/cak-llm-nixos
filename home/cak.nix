@@ -11,7 +11,8 @@
   };
 
   cak.home = {
-    hyprland.enable = true;
+    # Hyprland user session — enable only when the host uses Hyprland.
+    hyprland.enable = false;
     browser.firefox.enable = true;
   };
 
