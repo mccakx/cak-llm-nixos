@@ -50,6 +50,12 @@ in
         xfce.xfce4-whiskermenu-plugin # nicer start menu
         xfce.xfce4-pulseaudio-plugin # volume control in the panel
         xfce.xfce4-screenshooter
+
+        # Everyday apps (Thunar file manager already ships with XFCE)
+        xfce.mousepad # simple text editor
+        xfce.ristretto # image viewer
+        xarchiver # archive manager (zip/tar/7z…)
+        evince # PDF viewer
       ];
     })
 
