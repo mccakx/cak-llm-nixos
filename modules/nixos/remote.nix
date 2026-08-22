@@ -44,9 +44,7 @@ in
     })
 
     (lib.mkIf (cfg.idleLogoutMinutes > 0) {
-      services.logind.extraConfig = ''
-        StopIdleSessionSec=${toString (cfg.idleLogoutMinutes * 60)}
-      '';
+      services.logind.settings.Login.StopIdleSessionSec = cfg.idleLogoutMinutes * 60;
     })
   ];
 }
