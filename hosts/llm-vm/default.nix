@@ -7,6 +7,7 @@
     desktop.environment = "xfce";
     audio.enable = true;
     guest.hypervisor = "qemu";
+    remote.rdp.enable = true; # RDP via Remmina on 3389
 
     # Off for this lightweight VM; flip on when you need them.
     virtualisation.podman.enable = false;

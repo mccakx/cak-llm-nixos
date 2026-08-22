@@ -11,6 +11,7 @@
     ./users.nix
     ./audio.nix
     ./desktop.nix
+    ./remote.nix
     ./guest.nix
     ./virtualisation.nix
     ./gaming.nix
