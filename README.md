@@ -135,8 +135,14 @@ Every host can now opt in with one line. Same pattern under `modules/home/`.
 
 \* set in `home/cak.nix`.
 
-## Hyprland keybinds (defaults)
+## Hyprland keybinds
+
+Press **`SUPER`+`/`** any time for the full on-screen cheatsheet. The essentials:
 
 `SUPER`+`Return` terminal · `SUPER`+`D` launcher · `SUPER`+`B` Firefox ·
-`SUPER`+`E` files · `SUPER`+`Q` close · `SUPER`+`F` fullscreen ·
-`SUPER`+`1..9` workspaces · `PrintScr` screenshot region · `SUPER`+`L` lock.
+`SUPER`+`E` files · `SUPER`+`C` clipboard history · `SUPER`+`Q` close ·
+`SUPER`+`F` fullscreen · `SUPER`+`V` float · `SUPER`+`1..9` workspaces ·
+`SUPER`+arrows focus · `SUPER`+`Shift`+arrows move · `SUPER`+`Ctrl`+arrows resize ·
+`PrintScr` screenshot region · `SUPER`+`L` lock · `SUPER`+`Shift`+`Esc` exit.
+
+Auto-locks after 5 min idle; screen off at 6 min.
