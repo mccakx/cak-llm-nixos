@@ -18,15 +18,35 @@ let
 in
 {
   # Remote-access toggles. Off by default.
-  options.cak.remote.rdp.enable =
-    lib.mkEnableOption "xrdp remote desktop (RDP on TCP 3389, connect with Remmina)";
+  options.cak.remote = {
+    rdp.enable =
+      lib.mkEnableOption "xrdp remote desktop (RDP on TCP 3389, connect with Remmina)";
 
-  config = lib.mkIf cfg.rdp.enable {
-    services.xrdp = {
-      enable = true;
-      openFirewall = true; # opens TCP 3389
-      defaultWindowManager = "${xrdpXfceSession}";
+    idleLogoutMinutes = lib.mkOption {
+      type = lib.types.int;
+      default = 0;
+      description = ''
+        Auto-logout any login session idle longer than this many minutes
+        (0 = never). Prevents a forgotten console login from blocking an
+        RDP login of the same user. Applies to all sessions incl. RDP.
+      '';
     };
-    # xrdp auto-generates a self-signed TLS cert on first start.
   };
+
+  config = lib.mkMerge [
+    (lib.mkIf cfg.rdp.enable {
+      services.xrdp = {
+        enable = true;
+        openFirewall = true; # opens TCP 3389
+        defaultWindowManager = "${xrdpXfceSession}";
+      };
+      # xrdp auto-generates a self-signed TLS cert on first start.
+    })
+
+    (lib.mkIf (cfg.idleLogoutMinutes > 0) {
+      services.logind.extraConfig = ''
+        StopIdleSessionSec=${toString (cfg.idleLogoutMinutes * 60)}
+      '';
+    })
+  ];
 }

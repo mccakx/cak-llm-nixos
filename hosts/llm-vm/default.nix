@@ -8,6 +8,7 @@
     audio.enable = true;
     guest.hypervisor = "qemu";
     remote.rdp.enable = true; # RDP via Remmina on 3389
+    remote.idleLogoutMinutes = 15; # forgotten console login can't block RDP
 
     # Off for this lightweight VM; flip on when you need them.
     virtualisation.podman.enable = false;
