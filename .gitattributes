@@ -1,0 +1,3 @@
+# Force LF everywhere so the config checks out clean on Linux,
+# regardless of the OS it's edited on.
+* text=auto eol=lf
